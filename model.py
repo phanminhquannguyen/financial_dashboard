@@ -1,6 +1,5 @@
 import io
 import pdfplumber
-from dotenv import load_dotenv
 import os
 import google.generativeai as genai
 import streamlit as st
