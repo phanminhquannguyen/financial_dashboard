@@ -5,7 +5,7 @@ import google.generativeai as genai
 import streamlit as st
 
 # Configure the API key from Streamlit secrets
-st.secrets["GOOGLE_API_KEY"] = st.secrets.get("GOOGLE_API_KEY") 
+genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
 model = genai.GenerativeModel("gemini-2.0-flash")
 
 def read_report(file) -> str:
