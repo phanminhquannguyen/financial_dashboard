@@ -8,3 +8,4 @@ beautifulsoup4
 psycopg2-binary
 yfinance
 pdfplumber
+google-generativeai
