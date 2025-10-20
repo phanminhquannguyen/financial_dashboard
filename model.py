@@ -3,11 +3,10 @@ import pdfplumber
 from dotenv import load_dotenv
 import os
 import google.generativeai as genai
+import streamlit as st
 
-# Configure Google API
-load_dotenv()
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-genai.configure(api_key=GOOGLE_API_KEY)
+# Configure the API key from Streamlit secrets
+st.secrets["GOOGLE_API_KEY"] = st.secrets.get("GOOGLE_API_KEY") 
 model = genai.GenerativeModel("gemini-2.0-flash")
 
 def read_report(file) -> str:
