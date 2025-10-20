@@ -3,7 +3,7 @@ import pandas as pd
 import requests
 import json
 import io
-from model import analyze_report
+from financial_dashboard.model import analyze_report
 from utils import find_similar_companies
 
 # Set the layout for the page
