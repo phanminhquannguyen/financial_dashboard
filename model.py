@@ -4,10 +4,16 @@ import os
 import google.generativeai as genai
 import streamlit as st
 
-# Configure the API key from Streamlit secrets
-genai.configure(st.secrets["GOOGLE_API_KEY"])
+# Move the API configuration inside the function to avoid import issues
+model = None
 
-model = genai.GenerativeModel("gemini-2.0-flash")
+def get_model():
+    """Initialize the model with API key from secrets"""
+    global model
+    if model is None:
+        genai.configure(api_key=st.secrets["GOOGLE_API_KEY"])
+        model = genai.GenerativeModel("gemini-2.0-flash")
+    return model
 
 def read_report(file) -> str:
     """Return plain text from an uploaded PDF or text file."""
@@ -22,16 +28,10 @@ def read_report(file) -> str:
         # Assume text-like files
         return file.read().decode("utf-8", errors="ignore")
 
-def chunk(s: str, max_len: int = 15000):
-    """Yield safe chunks so the prompt isn't too large."""
-    s = s or ""
-    for i in range(0, len(s), max_len):
-        yield s[i:i+max_len]
-
-def build_prompt(user_note: str, ticker: str) -> str:
-    """Build the prompt for the equity research analysis."""
+def build_prompt(user_note: str, ticker: str, report_text: str) -> str:
+    """Build the complete prompt including the report text."""
     return f"""
-As an equity research analyst, analyze the provided report excerpt(s) and deliver a concise, professional analysis in Markdown format. Present the analysis as a direct, objective report without referencing the process of reviewing excerpts or using a model. Focus on actionable insights, explicitly noting any missing information without speculation. Structure the response as follows:
+As an equity research analyst, analyze the provided financial report and deliver a concise, professional analysis in Markdown format. Present the analysis as a direct, objective report without referencing the process of reviewing excerpts or using a model. Focus on actionable insights, explicitly noting any missing information without speculation. Structure the response as follows:
 
 # Executive Summary
 - Provide 3–6 bullets summarizing key findings, focusing on financial performance, strategic developments, and market positioning.
@@ -48,21 +48,27 @@ As an equity research analyst, analyze the provided report excerpt(s) and delive
 Context:
 - Ticker: {ticker or 'N/A'}
 - User Note: {user_note or 'N/A'}
+
+FINANCIAL REPORT:
+{report_text}
 """
 
-def analyze_report(file, ticker: str, user_note: str) -> str:
+def analyze_report(file, ticker: str = None, user_note: str = None) -> str:
     """Analyze the uploaded report and return the generated review."""
     try:
+        # Get the model instance
+        model_instance = get_model()
+        
+        # Extract text from the file
         raw_text = read_report(file)
         if not raw_text.strip():
-            return "Couldn’t extract any text from the file."
+            return "Couldn't extract any text from the file."
 
-        prompt = build_prompt(user_note, ticker)
-        contents = [{"role": "user", "parts": prompt}]
-        for i, c in enumerate(chunk(raw_text)):
-            contents.append({"role": "user", "parts": f"[REPORT CHUNK {i+1}]\n{c}"})
-
-        resp = model.generate_content(contents=contents)
+        # Build the complete prompt with the report text
+        prompt = build_prompt(user_note or "", ticker or "", raw_text)
+        
+        # Generate content with the complete prompt
+        resp = model_instance.generate_content(prompt)
         return resp.text or "_No response text returned._"
 
     except Exception as e:

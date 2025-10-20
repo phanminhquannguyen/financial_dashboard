@@ -1,0 +1,159 @@
+{
+    "version": "1.0",
+    "updated_at": "2025-10-06",
+    "metrics": [
+      {
+        "id": "Basic EPS",
+        "name": "Basic Earnings Per Share (EPS)",
+        "definition": "Measures the portion of a company's profit allocated to each outstanding share of common stock.",
+        "formula_text": "(Net income − Preferred dividends) / Weighted average common shares outstanding",
+        "formula_latex": "\\(\\text{EPS}_{\\text{basic}} = \\frac{\\text{Net\\ income} - \\text{Preferred\\ dividends}}{\\text{Weighted\\ avg.\\ common\\ shares}}\\)",
+        "aliases": ["EPS (basic)", "Earnings per share (basic)", "Basic EPS"],
+        "unit": "currency per share",
+        "category": "per-share",
+        "higher_is_better": true,
+        "fields_needed": ["Net income common stockholders", "preferred_dividends", "Basic average shares"],
+        "notes": [
+          "Use weighted-average shares over the reporting period.",
+          "Exclude potential dilution from options/convertibles."
+        ]
+      },
+      {
+        "id": "Diluted EPS",
+        "name": "Diluted Earnings Per Share (EPS)",
+        "definition": "EPS assuming all dilutive securities (options, convertibles, RSUs) are exercised/converted.",
+        "formula_text": "(Net income − Preferred dividends) / Diluted weighted average shares outstanding",
+        "formula_latex": "\\(\\text{EPS}_{\\text{diluted}} = \\frac{\\text{Net\\ income} - \\text{Preferred\\ dividends}}{\\text{Diluted\\ weighted\\ avg.\\ shares}}\\)",
+        "aliases": ["EPS (diluted)", "Diluted earnings per share"],
+        "unit": "currency per share",
+        "category": "per-share",
+        "higher_is_better": true,
+        "fields_needed": ["Net income common stockholders", "preferred_dividends", "Diluted average shares"],
+        "notes": [
+          "Reflects potential share dilution; typically \\leq basic EPS."
+        ]
+      },
+      {
+        "id": "pe_ratio_ttm",
+        "name": "Price-to-Earnings (P/E) Ratio",
+        "definition": "Valuation multiple showing how much investors pay for $1 of earnings.",
+        "formula_text": "Price per share / EPS (TTM)",
+        "formula_latex": "\\(\\text{P/E} = \\frac{\\text{Price\\ per\\ share}}{\\text{EPS}_{\\text{TTM}}}\\)",
+        "aliases": ["P/E", "PE", "Trailing P/E", "Price-earnings ratio"],
+        "unit": "multiple",
+        "category": "valuation",
+        "higher_is_better": null,
+        "fields_needed": ["price_per_share", "Basic EPS"],
+        "notes": [
+          "Use trailing 12-month EPS for trailing P/E; forecasts for forward P/E.",
+          "Not meaningful when EPS \\leq 0; compare within the same industry."
+        ]
+      },
+      {
+        "id": "net_profit_margin",
+        "name": "Net Profit Margin",
+        "definition": "Share of revenue remaining as profit after all expenses.",
+        "formula_text": "Net income / Revenue",
+        "formula_latex": "\\(\\text{Net\\ profit\\ margin} = \\frac{\\text{Net\\ income}}{\\text{Revenue}}\\)",
+        "aliases": ["Profit margin", "Net margin"],
+        "unit": "ratio",
+        "category": "profitability",
+        "higher_is_better": true,
+        "fields_needed": ["Net income common stockholders", "Total revenue"],
+        "notes": [
+          "Related: Gross margin = Gross profit / Revenue; Operating margin = Operating income / Revenue."
+        ]
+      },
+      {
+        "id": "roa",
+        "name": "Return on Assets (ROA)",
+        "definition": "Profit generated per dollar of assets; measures asset-use efficiency.",
+        "formula_text": "Net income / Average total assets",
+        "formula_latex": "\\(\\text{ROA} = \\frac{\\text{Net\\ income}}{\\tfrac{\\text{Assets}_{\\text{beg}} + \\text{Assets}_{\\text{end}}}{2}}\\)",
+        "aliases": ["ROA", "Return on assets"],
+        "unit": "ratio",
+        "category": "profitability",
+        "higher_is_better": true,
+        "fields_needed": ["Net income common stockholders", "total_assets_begin", "total_assets_end"],
+        "notes": [
+          "Some analyses use EBIT / Average assets to remove capital-structure effects."
+        ]
+      },
+      {
+        "id": "debt_to_equity",
+        "name": "Debt-to-Equity Ratio (D/E)",
+        "definition": "Leverage measure showing how much debt finances the company relative to shareholders’ equity.",
+        "formula_text": "Total interest-bearing debt / Shareholders' equity",
+        "formula_latex": "\\(\\text{D/E} = \\frac{\\text{Total\\ interest\\!\\! -\\! bearing\\ debt}}{\\text{Shareholders'\\ equity}}\\)",
+        "aliases": ["D/E", "Total debt/equity", "Debt–equity ratio"],
+        "unit": "multiple",
+        "category": "leverage",
+        "higher_is_better": null,
+        "fields_needed": ["short_term_debt", "long_term_debt", "shareholders_equity"],
+        "notes": [
+          "Define debt consistently (short-term + long-term interest-bearing).",
+          "If equity is negative, D/E is not meaningful."
+        ]
+      },
+      {
+        "id": "Basic average shares",
+        "name": "Basic Average Shares",
+        "definition": "The weighted average number of common shares outstanding during the reporting period.",
+        "formula_text": "Sum of daily outstanding shares weighted by time / Reporting period",
+        "formula_latex": "\\(\\text{Basic average shares} = \\frac{\\sum (\\text{Shares outstanding} \\times \\text{Time})}{\\text{Reporting period}}\\)",
+        "aliases": ["Weighted average shares", "Average common shares"],
+        "unit": "shares",
+        "category": "per-share",
+        "higher_is_better": null,
+        "fields_needed": [],
+        "notes": [
+          "Used in calculating Basic EPS."
+        ]
+      },
+      {
+        "id": "Diluted average shares",
+        "name": "Diluted Average Shares",
+        "definition": "The weighted average number of shares outstanding, including dilutive securities like options and convertibles.",
+        "formula_text": "Basic average shares + Potential dilutive shares",
+        "formula_latex": "\\(\\text{Diluted average shares} = \\text{Basic average shares} + \\text{Potential dilutive shares}\\)",
+        "aliases": ["Diluted weighted average shares"],
+        "unit": "shares",
+        "category": "per-share",
+        "higher_is_better": null,
+        "fields_needed": ["Basic average shares", "dilutive_securities"],
+        "notes": [
+          "Used in calculating Diluted EPS."
+        ]
+      },
+      {
+        "id": "Net income common stockholders",
+        "name": "Net Income Common Stockholders",
+        "definition": "The profit allocated to common stockholders after expenses and preferred dividends.",
+        "formula_text": "Net income − Preferred dividends",
+        "formula_latex": "\\(\\text{Net income common stockholders} = \\text{Net income} - \\text{Preferred dividends}\\)",
+        "aliases": ["Net income to common", "Net income for common shareholders"],
+        "unit": "currency",
+        "category": "profitability",
+        "higher_is_better": true,
+        "fields_needed": ["Net income from continuing & discontinued operation", "preferred_dividends"],
+        "notes": [
+          "Key input for EPS calculations."
+        ]
+      },
+      {
+        "id": "Total revenue",
+        "name": "Total Revenue",
+        "definition": "The total income generated by the company from its operations before any expenses are deducted.",
+        "formula_text": "Sum of all revenue streams",
+        "formula_latex": "\\(\\text{Total revenue} = \\sum \\text{Revenue streams}\\)",
+        "aliases": ["Revenue", "Sales"],
+        "unit": "currency",
+        "category": "income",
+        "higher_is_better": true,
+        "fields_needed": [],
+        "notes": [
+          "Includes operating and non-operating revenue."
+        ]
+      }
+    ]
+}
