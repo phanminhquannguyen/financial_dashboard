@@ -1,0 +1,10 @@
+streamlit
+pandas
+selenium
+numpy
+pathlib
+requests
+beautifulsoup4
+psycopg2-binary
+yfinance
+pdfplumber
