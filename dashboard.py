@@ -3,11 +3,11 @@ import pandas as pd
 import requests
 import json
 import io
-from financial_dashboard.model import analyze_report
+from model import analyze_report
 from utils import find_similar_companies
 
 # Set the layout for the page
-st.set_page_config(layout="wide")
+st.set_page_config(layout="wide") 
 
 # Utils
 def format_number(val):
